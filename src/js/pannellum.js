@@ -58,7 +58,9 @@ var config,
     pitchSpeed = 0,
     zoomSpeed = 0,
     animating = false,
-    hotspotsCreated = false;
+    hotspotsCreated = false,
+    listeners = { "loaded": [], "render": [] }, // Array of listeners for each type of events
+    viewerInstance = this;
 
 var defaultConfig = {
     hfov: 100,
@@ -1090,7 +1092,9 @@ function renderInitCallback() {
         renderContainer.removeChild(preview);
         preview = undefined;
     }
+    
     loaded = true;
+    dispatchEvent("loaded"); // Dispatch event to indicate the viewer is loaded
     
     animateInit();
 }
@@ -1537,6 +1541,60 @@ function loadScene(sceneId, targetPitch, targetYaw) {
         config.yaw = workingYaw;
     }
     load();
+}
+
+/**
+ * Dispatch an event.
+ * @private
+ * @param {string} type - Event type/name.
+ * @param {Object} event - Event object (TODO explain what it is).
+ */
+function dispatchEvent(type, event) {
+    if (listeners[type] instanceof Array) {
+        var typeListeners = listeners[type];
+        for (var i = 0, len = typeListeners.length; i < len ; i++ ) {
+            
+            // Executing listeners without handeling errors
+            try {
+                typeListeners[i].call(viewerInstance, event);
+            } catch (_){}
+            
+        }
+    }
+}
+
+/**
+ * Add an event listener to a specified event type.
+ * @memberof Viewer
+ * @instance
+ * @param {string} type - Event type/name.
+ * @param {function} handler - Event handler, will be fired when the event is dispatched.
+ */
+this.addEventListener = function(type, handler) {
+    if (typeof listeners[type] == "undefined") {
+       listeners[type] = [];
+    }
+    
+    listeners[type].push( handler );
+}
+
+/**
+ * Remove an event listener.
+ * @memberof Viewer
+ * @instance
+ * @param {string} type - Event type/name
+ * @param {function} handler - Event handler that will be removed.
+ */
+this.removeListener = function(type, handler) {
+    if (listeners[type] instanceof Array) {
+        var typeListeners = listeners[type];
+        for (var i = 0, len = typeListeners.length; i < len ; i++ ) {
+            if (typeListeners[i] === listener) {
+                typeListeners.splice(i, 1);
+                break;
+            }
+        }
+    }
 }
 
 /**
