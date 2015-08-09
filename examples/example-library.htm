@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>pannellum embed example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+<h1>Embed test page</h1>
+
+<p>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ullamcorper sem et arcu gravida, id feugiat nisi vehicula. Suspendisse tempor arcu tellus, aliquet placerat erat convallis ac. Donec quis euismod odio. Sed eu purus sit amet massa lacinia sagittis sed a nisi. Phasellus sit amet convallis felis. Proin consequat neque in sem facilisis aliquam. Pellentesque cursus nunc vitae risus sollicitudin rhoncus. Nullam orci tellus, vestibulum vitae erat sit amet, tempus mollis mi. Etiam vel accumsan dolor, eget lacinia lacus. Mauris aliquam, massa vel suscipit lobortis, mauris urna feugiat justo, vitae blandit lacus tellus sit amet mi. Aliquam posuere dolor eu lobortis tincidunt. Nulla vel nunc quis lacus porta aliquet ac vel lectus. Cras sed dolor ligula. Integer ac orci congue, dignissim purus quis, egestas nulla. Donec ultricies elit in nulla faucibus facilisis. Vestibulum eget ex sed mauris commodo ultricies ac eget arcu. 
+</p>
+
+<div id="myOwnPannellumContainer" style="width: 350px; height: 250px;">
+   <noscript>
+        <div class="pnlm-info-box">
+            <p>Javascript is required to view this panorama.<br>(It could be worse; you could need a plugin.)</p>
+        </div>
+    </noscript>
+</div>
+<link type="text/css" rel="Stylesheet" href="../src/css/pannellum.css"/>
+<script type="text/javascript" src="../src/js/libpannellum.js"></script>
+<script type="text/javascript" src="../src/js/RequestAnimationFrame.js"></script>
+<script type="text/javascript" src="../src/js/pannellum.js"></script>
+
+<script type="text/javascript">
+    var onViewerLoaded = function(){
+        document.getElementById("viewer_loaded").style.color = "green";
+        console.log(this);
+    },
+    onRender = function(event){
+        if (event.hasOwnProperty('viewer')){
+            var pV = event.viewer;
+            document.getElementById("pos_pitch").value = pV.getPitch();
+            document.getElementById("pos_yaw").value = pV.getYaw();
+            document.getElementById("pos_hfov").value = pV.getHfov();
+        }
+    };
+
+    var panoCfg = {
+        "title": "Jordan Pond",
+        
+        "author": "Matthew Petroff",
+        
+        "preview": "./examplepano-preview.jpg",
+        
+        "type": "cubemap",
+        
+        "cubeMap": [
+            "./examplepanocube0.jpg",
+            "./examplepanocube1.jpg",
+            "./examplepanocube2.jpg",
+            "./examplepanocube3.jpg",
+            "./examplepanocube4.jpg",
+            "./examplepanocube5.jpg"
+        ],
+        
+        "hotSpots": [
+            {
+                "pitch": -12,
+                "yaw": 170,
+                "type": "info",
+                "text": "This is Jordan Pond, located in Acadia National Park."
+            },
+            {
+                "pitch": -10,
+                "yaw": -50,
+                "type": "info",
+                "text": "This is a link.",
+                "URL": "https://github.com/mpetroff/pannellum"
+            }
+        ]
+    },
+    pannellumViewer = pannellum.viewer('myOwnPannellumContainer', panoCfg);
+    
+    pannellumViewer.addEventListener("loaded", onViewerLoaded);
+    pannellumViewer.addEventListener("render", onRender);
+    
+    
+</script>
+
+<p>
+    Viewer info : <span style="color:red" id="viewer_loaded">loaded</span> 
+    <div>
+        Pitch : <input type="text" id="pos_pitch" value="?"><br>
+        Yaw : <input type="text" id="pos_yaw" value="?"><br>
+        hfov : <input type="text" id="pos_hfov" value="?"><br>
+    </div>
+</p>
+
+<p>
+ Sed placerat nisl sed purus vestibulum ullamcorper. In eu vulputate enim. Aliquam molestie id tellus ut scelerisque. Nam sit amet magna eu tellus consequat pellentesque. Quisque efficitur nisl finibus, accumsan nunc sed, placerat libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec tempus odio vitae nisi hendrerit, nec finibus arcu ultrices. Ut viverra sit amet odio vitae vehicula. Nunc tincidunt dolor eu sem pulvinar, quis semper lorem auctor. Sed vel auctor quam, id efficitur sem. Etiam viverra rutrum metus, ut pretium arcu laoreet id. Suspendisse tristique, velit et feugiat ornare, ex neque euismod ex, sed facilisis justo sem nec erat. Pellentesque varius, augue et condimentum viverra, nisl justo ultricies ipsum, sit amet efficitur enim purus non sapien. 
+</p>
+
+</body>
+</html>
